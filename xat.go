@@ -13,7 +13,7 @@ import (
 type options struct {
 	Filename       string
 	Sheetname      string
-	Separator      string `short:"s" long:"separator" description:"Column separator"`
+	Separator      string `short:"s" long:"separator" description:"Column separator" default:"\t"`
 	PrintRowNumber bool   `long:"print-row-num" description:"Print row number"`
 	PrintEmptyRow  bool   `long:"print-empty-row" description:"Print empty row"`
 }

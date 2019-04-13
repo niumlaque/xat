@@ -16,7 +16,7 @@ $ xat /path/to/file.xlsx
     Apple   Red     10
     Orange  Orange  20
     Grape   Purple  30
-    Lemon   Yellow  4
+    Lemon   Yellow  40
 ```
 
 ## License

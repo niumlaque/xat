@@ -21,4 +21,4 @@ $ xat /path/to/file.xlsx
 
 ## License
 
-[MIT](https://github.com/niumlaque/xat/blob/master/LICENCE)
+[MIT](https://github.com/niumlaque/xat/blob/master/LICENSE)

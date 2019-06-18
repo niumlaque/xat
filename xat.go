@@ -11,11 +11,13 @@ import (
 )
 
 type options struct {
-	Filename       string
-	Sheetname      string
-	Separator      string `short:"s" long:"separator" description:"Column separator" default:"\t"`
-	PrintRowNumber bool   `long:"print-row-num" description:"Print row number"`
-	PrintEmptyRow  bool   `long:"print-empty-row" description:"Print empty row"`
+	Filename         string
+	Sheetname        string
+	Separator        string `short:"s" long:"separator" description:"Column separator" default:"\t"`
+	PrintRowNumber   bool   `long:"print-row-num" description:"Print row number"`
+	PrintEmptyRow    bool   `long:"print-empty-row" description:"Print empty row"`
+	StartColumnIndex int    `short:"c" long:"start-column-index" description:"Index of start column"`
+	StartRowIndex    int    `short:"r" long:"start-row-index" description:"Index of start row"`
 }
 
 func getOptions(args []string) (*options, error) {
@@ -106,12 +108,20 @@ func main() {
 	failOnError(err)
 
 	for i, row := range sheet.Rows {
+		if i+1 < opts.StartRowIndex {
+			continue
+		}
+
 		if len(row.Cells) == 0 {
 			continue
 		}
 
 		texts := make([]string, 0, len(row.Cells))
-		for _, cell := range row.Cells {
+		for j, cell := range row.Cells {
+			if j+1 < opts.StartColumnIndex {
+				continue
+			}
+
 			texts = append(texts, cell.String())
 		}
 

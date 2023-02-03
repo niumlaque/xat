@@ -1,9 +1,27 @@
 use anyhow::{bail, Result};
 use calamine::{open_workbook, DataType, Reader, Xlsx};
 use clap::Parser;
-use itertools::Itertools;
 use std::io::{stdout, BufWriter, Write};
 use std::path::{Path, PathBuf};
+
+macro_rules! write_data {
+    ($w: ident, $d: ident) => {{
+        match $d {
+            DataType::Int(ref e) => write!($w, "{}", e),
+            DataType::Float(ref e) => write!($w, "{}", e),
+            DataType::String(ref e) => write!($w, "{}", e),
+            DataType::Bool(ref e) => write!($w, "{}", e),
+            DataType::DateTime(ref e) => write!(
+                $w,
+                "{}",
+                $d.as_datetime()
+                    .map_or_else(|| e.to_string(), |x| x.to_string())
+            ),
+            DataType::Error(ref e) => write!($w, "{}", e),
+            DataType::Empty => write!($w, ""),
+        }
+    }};
+}
 
 fn get_target_sheet<P: AsRef<Path>, S: AsRef<str>>(
     path: P,
@@ -43,7 +61,15 @@ fn write<W: Write>(
             continue;
         }
 
-        writer.write_all(line.iter().join(sep).as_bytes())?;
+        let mut iter = line.iter();
+        if let Some(first) = iter.next() {
+            write_data!(writer, first)?;
+            for x in iter {
+                writer.write_all(sep.as_bytes())?;
+                write_data!(writer, x)?;
+            }
+        }
+
         writer.write_all(eol.as_bytes())?;
     }
 

@@ -6,5 +6,5 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.68"
 clap = { version = "4.1.4", features = ["derive"] }
-calamine = "0.19.1"
-itertools = "0.10.5"
+calamine = { version = "0.19.1", features = ["dates"] }
+
